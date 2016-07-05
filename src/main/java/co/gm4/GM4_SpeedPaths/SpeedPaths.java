@@ -23,7 +23,8 @@ import java.util.UUID;
 
 public class SpeedPaths extends JavaPlugin implements Listener {
 
-    private float SPEED_MODIFIER;
+    private int SPEED_AMPLIFIER;
+    private int SPEED_DURATION;
     private List<UUID> ON_PATH = new ArrayList<>();
 
     @Override
@@ -32,7 +33,9 @@ public class SpeedPaths extends JavaPlugin implements Listener {
 
         saveDefaultConfig();
 
-        SPEED_MODIFIER = (float) getConfig().getDouble("speed-modifier", 0);
+        SPEED_AMPLIFIER = getConfig().getInt("speed-amplifier", 0);
+        SPEED_DURATION = getConfig().getInt("speed-duration", 30);
+
     }
 
     @SuppressWarnings("deprecation")
@@ -41,10 +44,10 @@ public class SpeedPaths extends JavaPlugin implements Listener {
         Block below = e.getPlayer().getLocation().getBlock();
         if(below != null && below.getType() == Material.GRASS_PATH) {
             ON_PATH.add(e.getPlayer().getUniqueId());
-            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 30, 0));
+            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, SPEED_DURATION, SPEED_AMPLIFIER));
         } else if(e.getPlayer().isOnGround() && ON_PATH.contains(e.getPlayer().getUniqueId())){
             ON_PATH.remove(e.getPlayer().getUniqueId());
-            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, 0));
+            e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 1, SPEED_AMPLIFIER));
         }
     }
 }
